@@ -56,6 +56,40 @@ def create_review(
 
     return new_review
 
+@router.put("/{review_id}", response_model=ReviewResponse)
+def update_review(
+    review_id: int,
+    review: ReviewCreate,
+    db: Session = Depends(get_db)
+):
+    existing_review = (
+        db.query(Review)
+        .filter(Review.id == review_id)
+        .first()
+    )
+
+    if not existing_review:
+        raise HTTPException(
+            status_code=404,
+            detail="Reseña no encontrada"
+        )
+
+    existing_review.user_id = review.user_id
+    existing_review.content_id = review.content_id
+    existing_review.watched = review.watched
+    existing_review.rating = review.rating
+    existing_review.review = review.review
+
+    if review.watched and not existing_review.watched_at:
+        existing_review.watched_at = datetime.now()
+
+    if not review.watched:
+        existing_review.watched_at = None
+
+    db.commit()
+    db.refresh(existing_review)
+
+    return existing_review
 
 @router.get("/", response_model=list[ReviewResponse])
 def get_reviews(
