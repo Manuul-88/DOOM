@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOOM - Avengers: Doomsday Tracker</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Bebas Neue + Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <script src="js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-doom-dark text-doom-silver font-sans min-h-screen pb-16 selection:bg-doom-greenMid selection:text-white">
+
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="doom-mask" viewBox="0 0 100 120">
+        <path fill="currentColor" fill-rule="evenodd" d="M50 3C22 3 9 30 9 58v58h82V58C91 30 78 3 50 3zM50 21C33 21 25 34 25 50v22c0 12 10 22 25 30 15-8 25-18 25-30V50C75 34 67 21 50 21z"/>
+        <path fill="currentColor" fill-rule="evenodd" d="M50 27c-12 0-19 9-19 22v21c0 9 8 17 19 24 11-7 19-15 19-24V49c0-13-7-22-19-22zM33 51l14 5v5l-14-3zM67 51l-14 5v5l14-3zM48 66h4v9h-4zM38 82h24v2H38zM41 88h18v2H41z"/>
+        <path class="eye" d="M33 51l14 5v5l-14-3zM67 51l-14 5v5l14-3z"/>
+    </symbol></svg>
+    <div id="portal"><svg viewBox="0 0 100 120"><use href="#doom-mask"/></svg><span>ABRIENDO INCURSIÓN</span></div>
+    <canvas id="fx"></canvas>
+    <div id="flash" style="position:fixed;inset:0;pointer-events:none;opacity:0;z-index:44;background:radial-gradient(circle,rgba(95,166,106,.5),transparent 70%)"></div>
+
+    <!-- Banner Superior -->
+    <div class="bg-black/90 border-b border-doom-steel/30 py-1.5 px-4 text-center text-[10px] sm:text-xs tracking-widest uppercase font-marvel-title text-doom-gold flex justify-center items-center gap-2">
+        <span class="bg-red-700 text-white px-1.5 py-0.5 font-black rounded-sm">MARVEL</span>
+        STUDIOS • DOOMSDAY TRACKER
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="border-b border-doom-steel/30 bg-doom-grayDark/90 backdrop-blur-md sticky top-0 z-40 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full p-0.5 bg-gradient-to-tr from-red-600 via-doom-gold to-doom-greenMid shadow-lg glow-doom flex items-center justify-center overflow-hidden shrink-0">
+                        <img src="assets/doom-logo.png" alt="Doom Emblem" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-marvel-title text-white leading-none tracking-wider">DOOMSDAY <span class="text-doom-gold">TRACKER</span></h1>
+                        <p class="text-[10px] sm:text-[11px] text-doom-silver/70 font-semibold uppercase tracking-widest">Road to Avengers: Doomsday</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Selector de usuario (los botones se generan con los usuarios del backend) + modo Latveria -->
+            <div class="flex items-center gap-1 bg-doom-dark p-1 rounded-xl border border-doom-steel/40 w-full sm:w-auto justify-center">
+                <div id="user-buttons" class="flex items-center gap-1 flex-1 justify-center"></div>
+                <span class="w-px h-5 bg-doom-steel/40 mx-1"></span>
+                <button id="latveria-toggle" title="Modo Latveria" aria-label="Modo Latveria" class="px-2.5 py-1.5 rounded-lg text-xs text-doom-gold hover:text-white smooth-transition"><i class="fa-solid fa-chess-rook"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-6 space-y-6">
+
+        <div id="api-error" class="hidden bg-red-900/30 border border-red-700/60 text-red-200 text-xs rounded-xl px-4 py-3" role="alert"></div>
+
+        <!-- Hero / Estado del protocolo -->
+        <section class="hero-doom p-6 sm:p-8">
+            <svg class="doom-wm hero-mask" viewBox="0 0 100 120" aria-hidden="true"><use href="#doom-mask"/></svg>
+            <div class="hero-content max-w-3xl">
+                <div class="flex items-center gap-2 text-[10px] sm:text-xs uppercase tracking-[.22em] text-doom-greenMid font-bold mb-3">
+                    <span class="status-dot"></span>
+                    DOOM PROTOCOL • MULTIVERSE STATUS: ACTIVE
+                </div>
+                <h2 class="font-marvel-title text-5xl sm:text-7xl text-white tracking-wider leading-none">
+                    PATH TO <span class="glitch text-doom-gold" data-text="DOOMSDAY">DOOMSDAY</span>
+                </h2>
+                <p class="mt-3 max-w-xl text-sm sm:text-base text-doom-silver/70">
+                    Registro personal de películas y series esenciales antes de
+                    <span class="text-white font-semibold">Avengers: Doomsday</span>.
+                </p>
+                <div class="mt-5 flex flex-wrap gap-2 text-[10px] uppercase tracking-widest font-bold">
+                    <span class="px-3 py-1.5 rounded-full bg-doom-dark/80 border border-doom-steel/30 text-doom-silver">
+                        <i class="fa-solid fa-shield-halved text-doom-gold mr-1"></i> Archivo activo
+                    </span>
+                    <span class="px-3 py-1.5 rounded-full bg-doom-dark/80 border border-doom-steel/30 text-doom-silver">
+                        <i class="fa-solid fa-clock text-doom-greenMid mr-1"></i> Seguimiento personal
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Métricas -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="dashboard-card bg-doom-grayDark border border-doom-steel/40 p-4 sm:p-5 rounded-2xl relative overflow-hidden smooth-transition hover:border-doom-greenMid">
+                <svg class="doom-wm" style="right:-8px;bottom:-14px;width:6.5rem;height:7.8rem;color:rgba(174,179,181,.14);--eye:#5fa66a;filter:drop-shadow(0 0 5px rgba(95,166,106,.85))" viewBox="0 0 100 120" aria-hidden="true"><use href="#doom-mask"/></svg>
+                <p class="text-[11px] sm:text-xs font-bold text-doom-gold uppercase tracking-wider">Progreso Global</p>
+                <h3 id="stat-progress-text" class="text-2xl sm:text-3xl font-marvel-title text-white mt-1">0 / 0 COMPLETADOS</h3>
+                <div class="w-full bg-doom-dark rounded-full h-2.5 mt-3 border border-doom-steel/30 overflow-hidden">
+                    <div id="stat-progress-bar" class="progress-shine bg-gradient-to-r from-doom-greenDark to-doom-greenMid h-full rounded-full smooth-transition" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="dashboard-card bg-doom-grayDark border border-doom-steel/40 p-4 sm:p-5 rounded-2xl flex items-center justify-between smooth-transition hover:border-doom-gold/60">
+                <div>
+                    <p class="text-[11px] sm:text-xs font-bold text-doom-gold uppercase tracking-wider">Promedio de Valoración</p>
+                    <h3 id="stat-avg-rating" class="text-2xl sm:text-3xl font-marvel-title text-white mt-1">0.0 / 10</h3>
+                    <p class="text-[10px] sm:text-[11px] text-doom-silver/60">Puntuación personal acumulada</p>
+                </div>
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-doom-dark border border-doom-gold/50 flex items-center justify-center glow-gold shrink-0">
+                    <i class="fa-solid fa-star text-doom-gold text-lg sm:text-xl"></i>
+                </div>
+            </div>
+
+            <div class="dashboard-card bg-doom-grayDark border border-doom-steel/40 p-4 sm:p-5 rounded-2xl sm:col-span-2 lg:col-span-3">
+                <p class="text-[11px] sm:text-xs font-bold text-doom-gold uppercase tracking-wider">Incursión: VS</p>
+                <div class="vs-row">
+                    <div id="vs-side1" class="vs-side"><span class="font-royal text-xs text-doom-silver" id="vs-name1">—</span><b id="vs-user1" class="vs-num">0</b><div class="vs-track"><div id="vs-bar1" class="vs-fill"></div></div></div>
+                    <div class="vs-badge">VS</div>
+                    <div id="vs-side2" class="vs-side r"><span class="font-royal text-xs text-doom-silver" id="vs-name2">—</span><b id="vs-user2" class="vs-num">0</b><div class="vs-track"><div id="vs-bar2" class="vs-fill"></div></div></div>
+                </div>
+                <p id="vs-status" class="text-center text-[11px] text-doom-silver/60 mt-3"></p>
+            </div>
+        </section>
+
+        <!-- Próximo objetivo -->
+        <section id="next-target" class="next-target rounded-2xl p-4 sm:p-5 content-fade"></section>
+
+        <!-- Barra de Búsqueda, Filtros y Modo de Vista -->
+        <section class="bg-doom-grayDark p-4 rounded-xl border border-doom-steel/30 space-y-4">
+            
+            <!-- Fila Superior: Buscador + Selector de Vista -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
+                
+                <!-- Buscador de Título -->
+                <div class="search-shell relative w-full sm:w-80 smooth-transition">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-doom-steel text-xs"></i>
+                    <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Buscar película o serie..."
+                        class="w-full bg-doom-dark border border-doom-steel/40 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-doom-steel/60 focus:outline-none focus:border-doom-gold smooth-transition">
+                </div>
+
+                <!-- Selector de Vista (Grid vs List) -->
+                <div class="view-switch flex items-center gap-1 bg-doom-dark p-1 rounded-lg border border-doom-steel/30 w-full sm:w-auto justify-center">
+                    <button id="view-btn-grid" onclick="setViewMode('grid')" class="flex-1 sm:flex-none px-3 py-1.5 rounded text-xs font-bold bg-doom-greenDark text-white border border-doom-greenMid smooth-transition">
+                        <i class="fa-solid fa-grip-vertical mr-1"></i> Cuadrícula
+                    </button>
+                    <button id="view-btn-list" onclick="setViewMode('list')" class="flex-1 sm:flex-none px-3 py-1.5 rounded text-xs font-bold text-doom-silver hover:text-white smooth-transition">
+                        <i class="fa-solid fa-list-check mr-1"></i> Lista Comparativa
+                    </button>
+                </div>
+            </div>
+
+            <!-- Fila Inferior: Botones de Filtro -->
+            <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-doom-steel/20">
+                <span class="text-xs font-bold text-doom-silver uppercase mr-1 w-full sm:w-auto"><i class="fa-solid fa-filter text-doom-gold mr-1"></i> Filtrar:</span>
+                <button data-filter="all" onclick="filterContent('all')" class="filter-btn active px-3 py-1 text-xs rounded-md bg-doom-greenDark text-white font-semibold border border-doom-greenMid smooth-transition">Todos <span class="filter-count" id="count-all"></span></button>
+                <button data-filter="movie" onclick="filterContent('movie')" class="filter-btn px-3 py-1 text-xs rounded-md bg-doom-dark text-doom-silver hover:text-white border border-doom-steel/30 smooth-transition">Películas <span class="filter-count" id="count-movie"></span></button>
+                <button data-filter="series" onclick="filterContent('series')" class="filter-btn px-3 py-1 text-xs rounded-md bg-doom-dark text-doom-silver hover:text-white border border-doom-steel/30 smooth-transition">Series <span class="filter-count" id="count-series"></span></button>
+                <button data-filter="pending" onclick="filterContent('pending')" class="filter-btn px-3 py-1 text-xs rounded-md bg-doom-dark text-doom-silver hover:text-white border border-doom-steel/30 smooth-transition">Pendientes <span class="filter-count" id="count-pending"></span></button>
+            </div>
+
+            <div class="flex items-center justify-between pt-1 text-[10px] uppercase tracking-widest text-doom-steel">
+                <span id="result-summary">Mostrando archivo completo</span>
+                <span><i class="fa-solid fa-database mr-1"></i> Archivo Doomsday</span>
+            </div>
+        </section>
+
+        <!-- Contenedor Principal -->
+        <section id="content-container" class="animate-fade-in">
+            <!-- Dynamic Content -->
+        </section>
+    </main>
+
+    <!-- Modal para Reseña con Fecha de Visualización -->
+    <div id="review-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4 z-50 animate-fade-in overflow-y-auto">
+        <div class="modal-panel bg-doom-grayDark border border-doom-gold/60 rounded-2xl p-5 sm:p-6 w-full max-w-lg space-y-4 shadow-2xl relative my-auto">
+            <div class="flex justify-between items-center border-b border-doom-steel/30 pb-3">
+                <h3 id="modal-title" class="font-marvel-title text-xl sm:text-2xl text-white tracking-wide leading-tight">CALIFICAR Y RESEÑAR</h3>
+                <button onclick="closeModal()" class="text-doom-silver hover:text-white text-2xl smooth-transition">&times;</button>
+            </div>
+            
+            <form id="review-form" onsubmit="saveReview(event)" class="space-y-4">
+                <input type="hidden" id="modal-content-id">
+                
+                <!-- Estrellas + Input Decimal -->
+                <div>
+                    <label class="block text-xs font-bold text-doom-gold uppercase tracking-wider mb-2">Puntuación (1 - 10)</label>
+                    
+                    <div id="star-rating-container" class="flex items-center gap-1.5 mb-3 text-doom-steel text-xl sm:text-2xl cursor-pointer" onmouseleave="resetStarsToSelected()">
+                        <!-- 10 estrellas dinámicas -->
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                        <input type="number" id="modal-rating" min="1" max="10" step="0.1" placeholder="Ej. 8.9" required
+                            oninput="syncStarsFromInput(this.value)"
+                            class="w-full sm:w-32 bg-doom-dark border border-doom-steel/50 rounded-xl p-2.5 text-white font-bold text-base focus:outline-none focus:border-doom-gold text-center smooth-transition">
+                        <span class="text-[11px] text-doom-silver/70">Puntaje exacto (ej. 8.5, 9.3).</span>
+                    </div>
+                </div>
+
+                <!-- Campo de Fecha de Visualización -->
+                <div>
+                    <label class="block text-xs font-bold text-doom-gold uppercase tracking-wider mb-2">Fecha en que se vio</label>
+                    <input type="date" id="modal-watched-at" required
+                        class="w-full bg-doom-dark border border-doom-steel/50 rounded-xl p-2.5 text-white text-xs focus:outline-none focus:border-doom-gold smooth-transition">
+                </div>
+
+                <!-- Reseña Texto -->
+                <div>
+                    <label class="block text-xs font-bold text-doom-gold uppercase tracking-wider mb-2">Reseña Personal</label>
+                    <textarea id="modal-review" rows="3" placeholder="Escribe tu reseña, teorías o conexión con Doom..."
+                        class="w-full bg-doom-dark border border-doom-steel/50 rounded-xl p-3 text-white text-xs sm:text-sm focus:outline-none focus:border-doom-greenMid smooth-transition"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2 border-t border-doom-steel/20">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-xs font-bold rounded-xl border border-doom-steel/40 text-doom-silver hover:text-white smooth-transition">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 text-xs font-bold rounded-xl bg-doom-greenDark text-white hover:bg-doom-greenMid border border-doom-gold smooth-transition glow-doom">Guardar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Principal -->
+    <script src="js/api.js"></script>
+    <script src="js/effects.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
