@@ -7,7 +7,7 @@ class ReviewCreate(BaseModel):
     user_id: int
     content_id: int
     watched: bool = False
-    rating: int | None = None
+    rating: float | None = None
     review: str | None = None
 
 

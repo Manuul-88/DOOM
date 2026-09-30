@@ -3,6 +3,7 @@ from sqlalchemy import (
     CheckConstraint,
     Column,
     DateTime,
+    Float,
     ForeignKey,
     Integer,
     Text,
@@ -29,13 +30,26 @@ class Review(Base):
         nullable=False
     )
 
-    watched = Column(Boolean, default=False, nullable=False)
+    watched = Column(
+        Boolean,
+        default=False,
+        nullable=False
+    )
 
-    rating = Column(Integer, nullable=True)
+    rating = Column(
+        Float,
+        nullable=True
+    )
 
-    review = Column(Text, nullable=True)
+    review = Column(
+        Text,
+        nullable=True
+    )
 
-    watched_at = Column(DateTime, nullable=True)
+    watched_at = Column(
+        DateTime,
+        nullable=True
+    )
 
     __table_args__ = (
         UniqueConstraint(
