@@ -6,10 +6,10 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("POSTGRES_URL")
 
 if not DATABASE_URL:
-    raise ValueError("No se encontró DATABASE_URL en el archivo .env")
+    raise ValueError("No se encontró POSTGRES_URL en las variables de entorno")
 
 engine = create_engine(
     DATABASE_URL,
