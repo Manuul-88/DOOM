@@ -14,8 +14,7 @@ if not DATABASE_URL:
 engine = create_engine(
     DATABASE_URL,
     connect_args={
-        "connect_timeout": 5,
-        "options": "-csearch_path=public"
+        "connect_timeout": 5
     }
 )
 
@@ -27,10 +26,8 @@ SessionLocal = sessionmaker(
 
 Base = declarative_base()
 
-
 def get_db():
     db = SessionLocal()
-
     try:
         yield db
     finally:
