@@ -24,3 +24,5 @@ dist/
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+doomsday_backup.sql
