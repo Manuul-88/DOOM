@@ -14,7 +14,8 @@ if not DATABASE_URL:
 engine = create_engine(
     DATABASE_URL,
     connect_args={
-        "connect_timeout": 5
+        "connect_timeout": 5,
+        "options": "-csearch_path=public"
     }
 )
 
