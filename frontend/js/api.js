@@ -1,6 +1,6 @@
 /* DOOM Tracker - capa de comunicacion con el backend (FastAPI).
    Las rutas son una suposicion segun el README: si el backend usa otras, solo hay que cambiarlas aqui. */
-const API_BASE_URL = 'http://localhost:8000'; // URL del backend (el backend debe permitir CORS para este origen)
+const API_BASE_URL = 'https://doom-backend-ten.vercel.app'; // URL del backend (el backend debe permitir CORS para este origen)
 
 // Hace una petición al backend y devuelve el JSON; lanza un error si la respuesta no es correcta.
 async function apiRequest(path, options = {}) {
